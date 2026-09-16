@@ -18,7 +18,8 @@ def index(request):
 
     # Challenge - Genre and word filter
     num_genre = Genre.objects.all().count()
-    num_genre_filtered = Genre.objects.filter().count()
+    num_genre_filtered = Genre.objects.filter(name__icontains='the').count()
+    num_books_filtered = Book.objects.filter(title__icontains='the').count()
 
     context = {
         'num_books': num_books,
@@ -26,6 +27,8 @@ def index(request):
         'num_instances_available': num_instances_available,
         'num_authors': num_authors,
         'num_genre': num_genre,
+        'num_genre_filtered': num_genre_filtered,
+        'num_books_filtered': num_books_filtered
     }
 
     # Render the HTML template index.html with the data in the context variable
