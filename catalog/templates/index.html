@@ -1,4 +1,7 @@
 {% extends "base_generic.html" %}
+{% load static %}
+
+{% block title %}Local Library Home{% endblock %}
 
 {% block content %}
   <h1>Local Library Home</h1>
@@ -19,7 +22,6 @@
   </ul>
 
   <img src="https://w3.cs.jmu.edu/cs347/f26/stewart.jpeg" alt="Dr. Stewart rockin' that Carolina Blue koy Kahala">
+  <img src="{% static '2010-kodiak-bear-1.jpg' %}" alt="Kodiak Bear">
 
-By <a href="//commons.wikimedia.org/wiki/User:Yathin_sk" title="User:Yathin sk">Yathin S Krishnappa</a> - <span class="int-own-work" lang="en">Own work</span>, <a href="https://creativecommons.org/licenses/by-sa/3.0" title="Creative Commons Attribution-Share Alike 3.0">CC BY-SA 3.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=23241619">Link</a>
 {% endblock %}
-
