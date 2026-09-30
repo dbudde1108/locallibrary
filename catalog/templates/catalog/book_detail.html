@@ -1,0 +1,21 @@
+{% extends "base_generic.html" %}
+
+{% block content %}
+  <h1>{{ book.title }}</h1>
+
+  <p><strong>Authors:</strong> {{ book.display_authors }}</p>
+  <p><strong>Summary:</strong> {{ book.summary }}</p>
+  <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+  <p><strong>Language:</strong> {{ book.language }}</p>
+
+  <div style="margin-left: 20px; margin-top: 20px;">
+    <h4>Genres</h4>
+    <ul>
+      {% for genre in book.genre.all %}
+        <li>{{ genre }}</li>
+      {% empty %}
+        <li>No genres listed.</li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

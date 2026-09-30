@@ -1,7 +1,9 @@
 from django.shortcuts import render
+from django.views import generic
 
 # Create your views here.
-from .models import Book, Author, BookInstance, Genre
+from .models import Author, Book, BookInstance, Genre
+
 
 def index(request):
     """View function for home page of site."""
@@ -11,25 +13,45 @@ def index(request):
     num_instances = BookInstance.objects.all().count()
 
     # Available books (status = 'a')
-    num_instances_available = BookInstance.objects.filter(status__exact='a').count()
+    num_instances_available = (
+        BookInstance.objects.filter(status__exact="a").count()
+    )
 
     # The 'all()' is implied by default.
     num_authors = Author.objects.count()
 
     # Challenge - Genre and word filter
     num_genre = Genre.objects.all().count()
-    num_genre_filtered = Genre.objects.filter(name__icontains='the').count()
-    num_books_filtered = Book.objects.filter(title__icontains='the').count()
+    num_genre_filtered = Genre.objects.filter(name__icontains="the").count()
+    num_books_filtered = Book.objects.filter(title__icontains="the").count()
 
     context = {
-        'num_books': num_books,
-        'num_instances': num_instances,
-        'num_instances_available': num_instances_available,
-        'num_authors': num_authors,
-        'num_genre': num_genre,
-        'num_genre_filtered': num_genre_filtered,
-        'num_books_filtered': num_books_filtered
+        "num_books": num_books,
+        "num_instances": num_instances,
+        "num_instances_available": num_instances_available,
+        "num_authors": num_authors,
+        "num_genre": num_genre,
+        "num_genre_filtered": num_genre_filtered,
+        "num_books_filtered": num_books_filtered,
     }
 
     # Render the HTML template index.html with the data in the context variable
-    return render(request, 'index.html', context=context)
+    return render(request, "index.html", context=context)
+
+
+class BookListView(generic.ListView):
+    model = Book
+    paginate_by = 10
+
+
+class BookDetailView(generic.DetailView):
+    model = Book
+
+
+class AuthorListView(generic.ListView):
+    model = Author
+    paginate_by = 10
+
+
+class AuthorDetailView(generic.DetailView):
+    model = Author

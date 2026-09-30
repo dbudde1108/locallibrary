@@ -1,3 +1,7 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "locallibrary"
 version = "0.1.0"
@@ -8,6 +12,9 @@ dependencies = [
     "django>=6.1.1",
     "django-environ>=0.14.0",
 ]
+
+[tool.setuptools]
+packages = ["locallibrary_config"]
 
 [dependency-groups]
 dev = [
