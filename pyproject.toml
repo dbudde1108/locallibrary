@@ -13,8 +13,8 @@ dependencies = [
     "django-environ>=0.14.0",
 ]
 
-[tool.setuptools]
-packages = ["locallibrary_config"]
+[tool.setuptools.packages.find]
+include = ["locallibrary_config*"]
 
 [dependency-groups]
 dev = [
