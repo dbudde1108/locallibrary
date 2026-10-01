@@ -13,10 +13,12 @@ dependencies = [
     "django-environ>=0.14.0",
 ]
 
-[tool.setuptools.packages.find]
-include = ["locallibrary_config*"]
-
 [dependency-groups]
 dev = [
     "pylint-django>=2.8.0",
 ]
+
+# Multiple top-level packages discovered in a flat-layout
+
+[tool.uv]
+package = false

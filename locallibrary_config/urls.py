@@ -36,9 +36,8 @@ urlpatterns += [
 
 # locallibrary_config/urls.py
 # (after the existing catalog block)
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
 urlpatterns += [
     path('chat/', include('chat.urls')),
 ]
-
-
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
