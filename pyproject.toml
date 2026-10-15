@@ -11,11 +11,17 @@ dependencies = [
     "channels[daphne]>=4.3.2",
     "django>=6.1.1",
     "django-environ>=0.14.0",
+    "whitenoise>=6.12.0",
 ]
 
 [dependency-groups]
 dev = [
     "pylint-django>=2.8.0",
+]
+prod = [
+    "daphne>=4.2.3",
+    "gunicorn>=26.2.0",
+    "psycopg[binary]>=3.3.6",
 ]
 
 # Multiple top-level packages discovered in a flat-layout
