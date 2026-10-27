@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'catalog.apps.CatalogConfig',
     'chat',
+    'ninja',
 ]
 
 MIDDLEWARE = [
@@ -86,6 +87,8 @@ DATABASES = {
     "default": env.db(default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
 }
 
+if DATABASES["default"]["ENGINE"] == "django.db.backends.dwlite3":
+    DATABASES["default"]["TEST"] = {"NAME": BASE_DIR / "test_db.sqlite3"}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.1/ref/settings/#auth-password-validators
@@ -136,6 +139,23 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MAILERS = {
     'default': {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
+    },
+}
+
+# locallibrary_config/settings.py
+# Channels
+ASGI_APPLICATION = "locallibrary_config.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [
+                {
+                    "address": env("REDIS_URL"),
+                    "socket_timeout": env.int("REDIS_SOCKET_TIMEOUT"),
+                }
+            ],
+        },
     },
 }
 

@@ -20,6 +20,7 @@ from django.urls import include
 from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
+from .api import api
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -40,4 +41,11 @@ urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += [
     path('chat/', include('chat.urls')),
+]
+
+# locallibrary_config/urls.py
+# (after the existing blocks)
+# Mount the Django Ninja API
+urlpatterns += [
+    path('api/', api.urls),
 ]
