@@ -172,11 +172,19 @@ BookAuthorFormSet = inlineformset_factory(
 
 
 class BookAuthorFormSetMixin:
-    """Adds the BookAuthor inline formset to a Book CreateView/UpdateView."""
+    """Adds the BookAuthor inline formset to a Book CreateView/UpdateView.
+
+    The formset is only used when the submitted data includes its management
+    form, so a POST that has just the book's own fields still saves the book.
+    """
+
+    def _formset_submitted(self):
+        prefix = BookAuthorFormSet.get_default_prefix()
+        return f'{prefix}-TOTAL_FORMS' in self.request.POST
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if self.request.method == 'POST':
+        if self.request.method == 'POST' and self._formset_submitted():
             context['author_formset'] = BookAuthorFormSet(
                 self.request.POST, instance=self.object)
         else:
@@ -184,13 +192,16 @@ class BookAuthorFormSetMixin:
         return context
 
     def form_valid(self, form):
-        author_formset = BookAuthorFormSet(
-            self.request.POST, instance=form.instance)
-        if not author_formset.is_valid():
-            return self.form_invalid(form)
+        author_formset = None
+        if self._formset_submitted():
+            author_formset = BookAuthorFormSet(
+                self.request.POST, instance=form.instance)
+            if not author_formset.is_valid():
+                return self.form_invalid(form)
         self.object = form.save()
-        author_formset.instance = self.object
-        author_formset.save()
+        if author_formset is not None:
+            author_formset.instance = self.object
+            author_formset.save()
         return HttpResponseRedirect(self.get_success_url())
 
 
