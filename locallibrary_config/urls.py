@@ -49,3 +49,9 @@ urlpatterns += [
 urlpatterns += [
     path('api/', api.urls),
 ]
+
+# Add django-allauth's account urls (for login, logout, sign-up, password management)
+
+urlpatterns += [
+    path('accounts/', include('allauth.urls')),
+]
