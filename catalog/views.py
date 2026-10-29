@@ -9,6 +9,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 def index(request):
     """View function for home page of site."""
 
+    # Count visits to this page, stored in the visitor's session
+    num_visits = request.session.get("num_visits", 0) + 1
+    request.session["num_visits"] = num_visits
+
     # Generate counts of some of the main objects
     num_books = Book.objects.all().count()
     num_instances = BookInstance.objects.all().count()
@@ -34,6 +38,7 @@ def index(request):
         "num_genre": num_genre,
         "num_genre_filtered": num_genre_filtered,
         "num_books_filtered": num_books_filtered,
+        "num_visits": num_visits,
     }
 
     # Render the HTML template index.html with the data in the context variable
@@ -61,7 +66,6 @@ class AuthorDetailView(generic.DetailView):
 class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
     """Generic class-based view listing books on loan to current user."""
     model = BookInstance
-    permission_required = 'catalog.can_mark_returned'
     template_name = 'catalog/bookinstance_list_borrowed_user.html'
     paginate_by = 10
 
@@ -69,6 +73,21 @@ class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
         return (
             BookInstance.objects.filter(borrower=self.request.user)
             .filter(status__exact='o')
+            .select_related('book', 'borrower')
+            .order_by('due_back')
+        )
+
+
+class LoanedBooksAllListView(PermissionRequiredMixin, generic.ListView):
+    """Generic class-based view listing all books on loan (librarians)."""
+    model = BookInstance
+    permission_required = 'catalog.can_mark_returned'
+    template_name = 'catalog/bookinstance_list_borrowed_all.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return (
+            BookInstance.objects.filter(status__exact='o')
             .select_related('book', 'borrower')
             .order_by('due_back')
         )
